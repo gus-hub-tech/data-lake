@@ -124,6 +124,27 @@ I ensured my user or role running the script had the following permissions:
 2. Implement a data transformation layer with AWS Glue ETL
 3. Add advanced analytics and visualizations (AWS QuickSight)
 
+## Cleanup Resources
+To avoid ongoing AWS charges, I can delete all created resources:
+
+1. In CloudShell, I typed:
+   ```bash
+   nano delete_aws_resources.py
+   ```
+
+2. I copied the contents from the `delete_aws_resources` file in this repository
+3. I pasted it into the CloudShell editor
+4. I pressed `Ctrl+X`, then `Y`, then `Enter` to save
+5. I ran the cleanup script:
+   ```bash
+   python3 delete_aws_resources.py
+   ```
+
+This will delete:
+- The S3 bucket and all its contents
+- The Glue database and tables
+- Any Athena query results
+
 ---
 
 **I'm ready to analyze data at scale! I can run the setup script and start querying in minutes!**
