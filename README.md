@@ -30,15 +30,33 @@ I ensured my user or role running the script had the following permissions:
 - **Glue**: `glue:CreateDatabase`, `glue:CreateTable`, `glue:DeleteDatabase`, `glue:DeleteTable`
 - **Athena**: `athena:StartQueryExecution`, `athena:GetQueryResults`
 
+#### Setting Up IAM Permissions
+1. I went to the AWS Console and searched for "IAM"
+2. I clicked on "Policies" in the left sidebar
+3. I clicked "Create Policy"
+4. I selected the "JSON" tab
+5. I copied the policy from `policies/IAM_Role.json` in this repository (excluding the "Resources" section at the bottom)
+6. I pasted it into the policy editor
+7. I clicked "Next" and named the policy `NBADataLakePolicy`
+8. I clicked "Create Policy"
+9. I went to "Users" in the left sidebar and selected my user
+10. I clicked "Add Permissions" → "Attach policies directly"
+11. I searched for and selected `NBADataLakePolicy`
+12. I clicked "Add Permissions"
+
 ## Getting Started
 
-### Step 1: Open CloudShell Console
+### Step 1: Verify IAM Permissions
+1. I ensured I had completed the IAM setup from the Prerequisites section above
+2. I verified my user had the `NBADataLakePolicy` attached
+
+### Step 2: Open CloudShell Console
 
 1. I went to aws.amazon.com & signed into my account
 
 2. At the top, next to the search bar I saw a square with a >_ inside, I clicked this to open the CloudShell
 
-### Step 2: Create the setup_nba_data_lake.py file
+### Step 3: Create the setup_nba_data_lake.py file
 1. In the CLI (Command Line Interface), I typed:
    ```bash
    nano setup_nba_data_lake.py
@@ -51,7 +69,7 @@ I ensured my user or role running the script had the following permissions:
 3. I pressed `Ctrl+X` to exit, pressed `Y` to save the file, and pressed `Enter` to confirm the file name 
 
 
-### Step 3: Create .env file
+### Step 4: Create .env file
 1. In the CLI (Command Line Interface), I typed:
    ```bash
    nano .env
@@ -66,7 +84,7 @@ I ensured my user or role running the script had the following permissions:
 3. I pressed `Ctrl+X` to exit, pressed `Y` to save the file, and pressed `Enter` to confirm the file name 
 
 
-### Step 4: Run the script
+### Step 5: Run the script
 1. In the CLI I typed:
    ```bash
    python3 setup_nba_data_lake.py
@@ -74,7 +92,7 @@ I ensured my user or role running the script had the following permissions:
 
 2. I saw that the resources were successfully created, the sample data was uploaded successfully and the Data Lake Setup Completed
 
-### Step 5: Verify the Resources
+### Step 6: Verify the Resources
 
 #### Check S3 Bucket
 1. In the AWS Search Bar, I typed "S3" and clicked the blue hyperlink
