@@ -9,6 +9,61 @@ My setup_nba_data_lake.py script performs the following actions:
 - Creates an AWS Glue database and an external table for querying the data
 - Configures Amazon Athena for querying data stored in the S3 bucket
 
+## Architecture Diagram
+
+```
+┌─────────────────┐    ┌──────────────────────────────────────────────────────┐
+│   SportsData.io │    │                    AWS Cloud                        │
+│   NBA API       │    │                                                      │
+│                 │    │  ┌─────────────────────────────────────────────────┐ │
+└─────────┬───────┘    │  │              Amazon S3 Bucket                  │ │
+          │            │  │        sports-analytics-data-lake-xxxxx         │ │
+          │ HTTP/JSON  │  │                                                 │ │
+          │            │  │  ┌─────────────────┐  ┌─────────────────────┐  │ │
+          │            │  │  │   raw-data/     │  │   athena-results/   │  │ │
+          │            │  │  │ nba_player_data │  │   (query outputs)   │  │ │
+          │            │  │  │     .jsonl      │  │                     │  │ │
+          │            │  │  └─────────────────┘  └─────────────────────┘  │ │
+          │            │  └─────────────────────────────────────────────────┘ │
+          │            │                           │                           │
+          │            │                           │                           │
+          │            │  ┌─────────────────────────────────────────────────┐ │
+          │            │  │                AWS Glue                        │ │
+          │            │  │                                                 │ │
+          │            │  │  Database: glue_nba_data_lake                  │ │
+          │            │  │  Table: nba_players                            │ │
+          │            │  │  Schema: PlayerID, FirstName, LastName,        │ │
+          │            │  │          Team, Position, Points                │ │
+          │            │  └─────────────────────────────────────────────────┘ │
+          │            │                           │                           │
+          │            │                           │                           │
+          │            │  ┌─────────────────────────────────────────────────┐ │
+          │            │  │              Amazon Athena                     │ │
+          │            │  │                                                 │ │
+          │            │  │  • Serverless SQL Query Engine                 │ │
+          │            │  │  • Queries S3 data via Glue Catalog           │ │
+          │            │  │  • Pay-per-query pricing                       │ │
+          │            │  └─────────────────────────────────────────────────┘ │
+          │            └──────────────────────────────────────────────────────┘
+          │
+┌─────────▼───────┐
+│  Setup Script   │
+│ (CloudShell)    │
+│                 │
+│ • Fetches data  │
+│ • Creates infra │
+│ • Configures    │
+│   services      │
+└─────────────────┘
+```
+
+### Data Flow:
+1. **Setup Script** fetches NBA player data from SportsData.io API
+2. **Data Storage** - Raw JSON data stored in S3 as line-delimited JSON
+3. **Data Catalog** - AWS Glue creates table schema and metadata
+4. **Query Engine** - Amazon Athena enables SQL queries on S3 data
+5. **Results** - Query outputs stored back in S3 for analysis
+
 ## Prerequisites
 Before running my script, I ensured I had the following:
 
