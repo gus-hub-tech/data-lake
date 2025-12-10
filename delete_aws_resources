@@ -2,8 +2,22 @@ import boto3
 from botocore.exceptions import ClientError
 
 # Define the names of resources to delete
-BUCKET_NAME = "sports-analytics-data-lake"
+BUCKET_PREFIX = "sports-analytics-data-lake"
 GLUE_DATABASE_NAME = "glue_nba_data_lake"
+
+def find_project_buckets():
+    """Find all buckets with the sports-analytics-data-lake prefix."""
+    s3 = boto3.client("s3")
+    try:
+        response = s3.list_buckets()
+        project_buckets = []
+        for bucket in response['Buckets']:
+            if bucket['Name'].startswith(BUCKET_PREFIX):
+                project_buckets.append(bucket['Name'])
+        return project_buckets
+    except ClientError as e:
+        print(f"Error listing buckets: {e}")
+        return []
 
 def delete_athena_query_results(bucket_name):
     """Delete Athena query results stored in the specified S3 bucket."""
@@ -54,13 +68,20 @@ def delete_glue_resources(database_name):
 
 def main():
     print("Deleting resources created during data lake setup...")
-    # Delete the S3 bucket
-    delete_s3_bucket(BUCKET_NAME)
+    
+    # Find and delete all project buckets
+    project_buckets = find_project_buckets()
+    if project_buckets:
+        print(f"Found {len(project_buckets)} project bucket(s): {project_buckets}")
+        for bucket_name in project_buckets:
+            delete_s3_bucket(bucket_name)
+    else:
+        print("No project buckets found to delete.")
+    
     # Delete Glue resources
     delete_glue_resources(GLUE_DATABASE_NAME)
-    # Delete Athena query results
-    delete_athena_query_results(BUCKET_NAME)
-    print("All specified resources deleted successfully.")
+    
+    print("Cleanup complete.")
 
 if __name__ == "__main__":
     main()
