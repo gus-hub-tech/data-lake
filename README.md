@@ -113,10 +113,56 @@ I ensured my user or role running the script had the following permissions:
 2. I clicked "Run"
 3. I saw an output when I scrolled down under "Query Results"
 
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### 1. Missing Python Packages
+**Error:** `ModuleNotFoundError: No module named 'boto3'` or similar
+
+**Solution:** Install required packages:
+```bash
+pip3 install boto3 requests python-dotenv
+```
+
+#### 2. S3 Bucket Already Exists
+**Error:** `BucketAlreadyExists: The requested bucket name is not available`
+
+**Solution:** The script now automatically generates a unique bucket name with a random suffix. If you still get this error, run the script again.
+
+#### 3. API Authentication Failed (401 Error)
+**Error:** `401 Client Error` when fetching NBA data
+
+**Solutions:**
+- Verify your `.env` file exists in the same directory as the script
+- Check that your API key is correct in the `.env` file
+- Ensure your SportsData.io API key is active and has NBA access
+- Test your API key manually at the SportsData.io developer portal
+
+#### 4. Missing Environment Variables
+**Error:** `SPORTS_DATA_API_KEY not found in .env file`
+
+**Solution:** Create or check your `.env` file contains:
+```bash
+SPORTS_DATA_API_KEY=your_actual_api_key_here
+NBA_ENDPOINT=https://api.sportsdata.io/v3/nba/scores/json/Players
+```
+
+#### 5. Athena Output Bucket Error
+**Error:** `Unable to verify/create output bucket`
+
+**Solution:** This happens when S3 bucket creation fails. Ensure the S3 bucket is created successfully before Athena configuration.
+
+#### 6. IAM Permission Errors
+**Error:** Access denied errors for AWS services
+
+**Solution:** Verify you have attached the `NBADataLakePolicy` to your user as described in the Prerequisites section.
+
 ## What I Learned
 1. Securing AWS services with least privilege IAM policies.
 2. Automating the creation of services with a script.
 3. Integrating external APIs into cloud-based workflows.
+4. Handling common deployment issues and error scenarios.
 
 
 ## Future Enhancements
