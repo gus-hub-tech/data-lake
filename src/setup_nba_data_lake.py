@@ -4,13 +4,17 @@ import time
 import requests
 from dotenv import load_dotenv
 import os
+import random
+import string
 
 # Load environment variables from .env file
 load_dotenv()
 
 # AWS configurations
 region = "us-east-1"  # Replace with your preferred AWS region
-bucket_name = "sports-analytics-data-lake"  # Change to a unique S3 bucket name
+# Generate unique bucket name
+random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+bucket_name = f"sports-analytics-data-lake-{random_suffix}"
 glue_database_name = "glue_nba_data_lake"
 athena_output_location = f"s3://{bucket_name}/athena-results/"
 
@@ -34,8 +38,16 @@ def create_s3_bucket():
                 CreateBucketConfiguration={"LocationConstraint": region},
             )
         print(f"S3 bucket '{bucket_name}' created successfully.")
+        print(f"Remember this bucket name: {bucket_name}")
+    except s3_client.exceptions.BucketAlreadyExists:
+        print(f"Error: Bucket name '{bucket_name}' already exists globally. Trying a different name...")
+        return False
+    except s3_client.exceptions.BucketAlreadyOwnedByYou:
+        print(f"S3 bucket '{bucket_name}' already exists and is owned by you.")
     except Exception as e:
         print(f"Error creating S3 bucket: {e}")
+        return False
+    return True
 
 def create_glue_database():
     """Create a Glue database for the data lake."""
@@ -52,12 +64,26 @@ def create_glue_database():
 
 def fetch_nba_data():
     """Fetch NBA player data from sportsdata.io."""
+    if not api_key:
+        print("Error: SPORTS_DATA_API_KEY not found in .env file")
+        return []
+    if not nba_endpoint:
+        print("Error: NBA_ENDPOINT not found in .env file")
+        return []
+    
     try:
         headers = {"Ocp-Apim-Subscription-Key": api_key}
+        print(f"Fetching data from: {nba_endpoint}")
         response = requests.get(nba_endpoint, headers=headers)
         response.raise_for_status()  # Raise an error for bad status codes
         print("Fetched NBA data successfully.")
         return response.json()  # Return JSON response
+    except requests.exceptions.HTTPError as e:
+        if response.status_code == 401:
+            print(f"Error: Invalid API key. Please check your SPORTS_DATA_API_KEY in .env file")
+        else:
+            print(f"HTTP Error fetching NBA data: {e}")
+        return []
     except Exception as e:
         print(f"Error fetching NBA data: {e}")
         return []
@@ -131,12 +157,22 @@ def configure_athena():
 # Main workflow
 def main():
     print("Setting up data lake for NBA sports analytics...")
-    create_s3_bucket()
+    print(f"Using bucket name: {bucket_name}")
+    
+    bucket_created = create_s3_bucket()
+    if not bucket_created:
+        print("Failed to create S3 bucket. Exiting...")
+        return
+    
     time.sleep(5)  # Ensure bucket creation propagates
     create_glue_database()
     nba_data = fetch_nba_data()
     if nba_data:  # Only proceed if data was fetched successfully
         upload_data_to_s3(nba_data)
+    else:
+        print("No data fetched. Skipping upload and table creation.")
+        return
+    
     create_glue_table()
     configure_athena()
     print("Data lake setup complete.")
