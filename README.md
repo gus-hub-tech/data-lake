@@ -186,10 +186,12 @@ To avoid ongoing AWS charges, I can delete all created resources:
    python3 delete_aws_resources.py
    ```
 
-This will delete:
-- The S3 bucket and all its contents
+The cleanup script automatically finds and deletes:
+- All S3 buckets starting with `sports-analytics-data-lake` (regardless of random suffix)
 - The Glue database and tables
 - Any Athena query results
+
+**Note:** The script dynamically discovers buckets, so it works even if your setup script created a bucket with a unique random suffix like `sports-analytics-data-lake-abc12345`.
 
 ---
 
