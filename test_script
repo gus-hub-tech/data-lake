@@ -1,0 +1,83 @@
+"""
+# Sports Data API Test Script
+
+This script tests the SportsData.io NBA API connection.
+
+## Usage
+
+To run this script, ensure you have the 'requests' library installed:
+
+```bash
+pip install requests
+python test_script.py
+```
+
+## What the script does:
+
+- Tests API connectivity
+- Shows detailed error messages
+- Pretty prints the JSON response
+
+## Expected Output:
+
+If successful, you'll see team data like:
+
+```json
+Status Code: 200
+Success! Retrieved 30 teams
+First team:
+{
+  "TeamID": 1,
+  "Key": "ATL",
+  "Name": "Atlanta Hawks",
+  ...
+}
+```
+"""
+
+
+import requests
+import json
+
+# Your API credentials - REPLACE WITH YOUR ACTUAL KEY
+API_KEY = 'Your_SportsData_API_Key_Here'
+BASE_URL = 'https://api.sportsdata.io/v3/nba/scores/json'
+
+def test_api_endpoint():
+    """Test API endpoint to verify API key works"""
+    print("=" * 60)
+    print("Testing NBA Teams Endpoint")
+    print("=" * 60)
+    
+    endpoint = f'{BASE_URL}/teams?key={API_KEY}'
+    print(f"Endpoint: {endpoint}\n")
+    
+    try:
+        response = requests.get(endpoint)
+        print(f"Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"Success! Retrieved {len(data)} teams")
+            print("\nFirst team:")
+            print(json.dumps(data[0], indent=2))
+        else:
+            print(f"Error Response: {response.text}")
+            
+    except Exception as e:
+        print(f"Exception occurred: {str(e)}")
+
+if __name__ == "__main__":
+    print("Sports Data API Test Script")
+    print("Testing NBA API Connection\n")
+    
+    # Install requests if needed
+    print("Make sure you have requests installed:")
+    print("pip install requests\n")
+    
+    # Test API
+    test_api_endpoint()
+    
+    print("\n" + "=" * 60)
+    print("Testing Complete!")
+    print("=" * 60)
