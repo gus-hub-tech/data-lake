@@ -219,6 +219,32 @@ NBA_ENDPOINT=https://api.sportsdata.io/v3/nba/scores/json/Players
 3. Integrating external APIs into cloud-based workflows.
 4. Handling common deployment issues and error scenarios.
 
+## Development Notes
+
+### API Key Management Best Practices
+
+**For Production Scripts:**
+- ✅ Use `.env` files with `python-dotenv`
+- ✅ Keep API keys out of source code
+- ✅ Use environment variables for configuration
+- ❌ Never commit API keys to version control
+
+**For Testing Scripts:**
+- ✅ Hardcoding API keys is acceptable for local testing
+- ✅ Fewer dependencies make debugging easier
+- ✅ Temporary use for troubleshooting connectivity
+- ⚠️ Remember to remove keys before sharing code publicly
+
+### Current Project Structure:
+- `setup_nba_data_lake.py` - Uses dotenv (production script)
+- `test_sports_api.py` - Hardcoded keys (test script)
+- `.env` - Contains actual API credentials
+
+### API Key Troubleshooting:
+1. **401 Errors** - Usually indicate expired free trial or invalid key
+2. **Test manually** - Use curl to verify API key works
+3. **Check subscription** - Ensure NBA access is included
+4. **Try different endpoints** - Teams endpoint may have different permissions
 
 ## Future Enhancements
 1. Automate data ingestion with AWS Lambda
