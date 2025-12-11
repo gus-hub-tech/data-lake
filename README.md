@@ -282,3 +282,15 @@ The cleanup script automatically finds and deletes:
 
 **I'm ready to analyze data at scale! I can run the setup script and start querying in minutes!**
 
+## Demo Images
+
+<img width="1313" height="393" alt="iam-permissions" src="https://github.com/user-attachments/assets/f37c5c4e-112f-437f-b020-7092f2ba2812" />
+<img width="803" height="192" alt="python-scripts" src="https://github.com/user-attachments/assets/0373f758-2f56-4244-8628-1a76893d23ab" />
+<img width="842" height="332" alt="run-script-creation" src="https://github.com/user-attachments/assets/c19dd82a-e2bd-4a49-8008-411b808552de" />
+<img width="1318" height="427" alt="s3-objects" src="https://github.com/user-attachments/assets/e8133df7-85b2-476b-be1c-0156e087e23f" />
+<img width="1747" height="793" alt="s3-objets-raw" src="https://github.com/user-attachments/assets/45a22979-b2f3-482a-b01b-76fff9ad74dd" />
+<img width="1326" height="256" alt="glue-databases" src="https://github.com/user-attachments/assets/09184d6e-5770-42f2-9204-bd73dcfa4ce6" />
+<img width="1327" height="327" alt="glue-table" src="https://github.com/user-attachments/assets/bb8a495e-c320-4e99-83dc-d629e20f4a57" />
+<img width="1210" height="241" alt="athena-queries" src="https://github.com/user-attachments/assets/5e143dad-0504-4618-8982-8f1f51fbdd9e" />
+<img width="1192" height="418" alt="athena-query-stats" src="https://github.com/user-attachments/assets/54da963e-450d-4aae-a64a-4b2fe6325a32" />
+<img width="872" height="292" alt="python-delete-all-resources" src="https://github.com/user-attachments/assets/e15b0d33-3081-416d-8430-6e18664430a8" />
