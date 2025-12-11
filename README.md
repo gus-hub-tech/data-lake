@@ -114,11 +114,12 @@ I ensured my user or role running the script had the following permissions:
 ### Step 3: Create the setup_nba_data_lake.py file
 1. In the CLI (Command Line Interface), I typed:
    ```bash
-   nano setup_nba_data_lake.py
+   mkdir src
+   nano src/setup_nba_data_lake.py
    ```
 
 2. In another window, I went to [GitHub](https://github.com/gus-hub-tech/data-lake)
-   - I copied the contents inside the setup_nba_data_lake.py file
+   - I copied the contents inside the src/setup_nba_data_lake.py file
    - I went back to the Cloudshell window and pasted the contents inside the file
 
 3. I pressed `Ctrl+X` to exit, pressed `Y` to save the file, and pressed `Enter` to confirm the file name 
@@ -127,7 +128,7 @@ I ensured my user or role running the script had the following permissions:
 ### Step 4: Create .env file
 1. In the CLI (Command Line Interface), I typed:
    ```bash
-   nano .env
+   nano src/.env
    ```
 
 2. I pasted the following lines into my file, ensuring I replaced `your_sportsdata_api_key` with my actual API key:
@@ -142,6 +143,7 @@ I ensured my user or role running the script had the following permissions:
 ### Step 5: Run the script
 1. In the CLI I typed:
    ```bash
+   cd src
    python3 setup_nba_data_lake.py
    ```
 
@@ -189,15 +191,15 @@ pip3 install boto3 requests python-dotenv
 **Error:** `401 Client Error` when fetching NBA data
 
 **Solutions:**
-- Verify your `.env` file exists in the same directory as the script
-- Check that your API key is correct in the `.env` file
+- Verify your `src/.env` file exists in the src directory
+- Check that your API key is correct in the `src/.env` file
 - Ensure your SportsData.io API key is active and has NBA access
 - Test your API key manually at the SportsData.io developer portal
 
 #### 4. Missing Environment Variables
 **Error:** `SPORTS_DATA_API_KEY not found in .env file`
 
-**Solution:** Create or check your `.env` file contains:
+**Solution:** Create or check your `src/.env` file contains:
 ```bash
 SPORTS_DATA_API_KEY=your_actual_api_key_here
 NBA_ENDPOINT=https://api.sportsdata.io/v3/nba/scores/json/Players
@@ -236,9 +238,11 @@ NBA_ENDPOINT=https://api.sportsdata.io/v3/nba/scores/json/Players
 - ⚠️ Remember to remove keys before sharing code publicly
 
 ### Current Project Structure:
-- `setup_nba_data_lake.py` - Uses dotenv (production script)
-- `test_sports_api.py` - Hardcoded keys (test script)
-- `.env` - Contains actual API credentials
+- `src/setup_nba_data_lake.py` - Uses dotenv (production script)
+- `test_script` - Hardcoded keys (test script)
+- `src/.env` - Contains actual API credentials
+- `policies/IAM_Role.json` - IAM policy for AWS permissions
+- `delete_aws_resources` - Cleanup script
 
 ### API Key Troubleshooting:
 1. **401 Errors** - Usually indicate expired free trial or invalid key
